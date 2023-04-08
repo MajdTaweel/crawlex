@@ -18,6 +18,9 @@ defmodule CrawlexWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/sites/new", NewSiteLive
+    live "/sites/:id", SiteLive
+    live "/scrapers/new", NewScraperLive
   end
 
   # Other scopes may use custom stacks.

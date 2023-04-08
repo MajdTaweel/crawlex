@@ -1,0 +1,12 @@
+<div>
+  <.form for={@form} phx-change="validate" phx-submit="save">
+    <.input type="text" field={@form[:sku]} label="SKU" />
+    <.input type="text" field={@form[:name]} label="Name" />
+    <.input type="text" field={@form[:description]} label="Description" />
+    <.input type="text" field={@form[:images]} label="Images" />
+    <.input type="text" field={@form[:sizes]} label="Sizes" />
+    <.input type="text" field={@form[:color]} label="Color" />
+    <.input type="text" field={@form[:brand]} label="Brand" />
+    <.button>Save</.button>
+  </.form>
+</div>

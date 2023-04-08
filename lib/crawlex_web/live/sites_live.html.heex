@@ -1,0 +1,21 @@
+<h1>Sites</h1>
+
+<table>
+  <tr>
+    <th>ID</th>
+    <th>Name</th>
+    <th>Base Url</th>
+  </tr>
+
+  <%= if Enum.empty?(@sites) do %>
+    No sites yet. Start by creating one
+  <% else %>
+    <%= for site <- @sites do %>
+      <tr>
+        <td><%= site.id %></td>
+        <td><%= site.name %></td>
+        <td><%= site.base_url %></td>
+      </tr>
+    <% end %>
+  <% end %>
+</table>
