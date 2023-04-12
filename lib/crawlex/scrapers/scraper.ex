@@ -54,7 +54,8 @@ defmodule Crawlex.Scrapers.Scraper do
       :brand,
       :description,
       :category,
-      :type
+      :type,
+      :site_id
     ])
     |> cast_embed(:colors, with: &color_changeset/2)
     |> cast_embed(:sizes, with: &size_changeset/2)
@@ -68,7 +69,8 @@ defmodule Crawlex.Scrapers.Scraper do
       :brand,
       :description,
       :category,
-      :type
+      :type,
+      :site_id
     ])
   end
 

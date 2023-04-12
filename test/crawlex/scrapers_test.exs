@@ -2,6 +2,7 @@ defmodule Crawlex.ScrapersTest do
   use Crawlex.DataCase
 
   alias Crawlex.Scrapers
+  alias Crawlex.SitesFixtures
 
   describe "scrapers" do
     alias Crawlex.Scrapers.Scraper
@@ -16,6 +17,7 @@ defmodule Crawlex.ScrapersTest do
       images: nil,
       name: nil,
       price: nil,
+      site_id: nil,
       sizes: nil,
       sku: nil,
       type: nil,
@@ -34,6 +36,8 @@ defmodule Crawlex.ScrapersTest do
     end
 
     test "create_scraper/1 with valid data creates a scraper" do
+      %{id: site_id} = SitesFixtures.site_fixture()
+
       valid_attrs = %{
         brand: "some brand",
         category: "some category",
@@ -42,6 +46,7 @@ defmodule Crawlex.ScrapersTest do
         images: "some images",
         name: "some name",
         price: "some price",
+        site_id: site_id,
         sizes: %{},
         sku: "some sku",
         type: "some type",
@@ -57,6 +62,7 @@ defmodule Crawlex.ScrapersTest do
       assert scraper.images == "some images"
       assert scraper.name == "some name"
       assert scraper.price == "some price"
+      assert scraper.site_id == site_id
       assert scraper.sizes == []
       assert scraper.sku == "some sku"
       assert scraper.type == "some type"

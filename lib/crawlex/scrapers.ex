@@ -57,7 +57,8 @@ defmodule Crawlex.Scrapers do
     Repo.one!(
       from s in Scraper,
         join: si in assoc(s, :site),
-        where: si.base_url == ^base_url
+        where: si.base_url == ^base_url,
+        select: s
     )
   end
 

@@ -4,10 +4,14 @@ defmodule Crawlex.ScrapersFixtures do
   entities via the `Crawlex.Scrapers` context.
   """
 
+  alias Crawlex.SitesFixtures
+
   @doc """
   Generate a scraper.
   """
   def scraper_fixture(attrs \\ %{}) do
+    %{id: site_id} = SitesFixtures.site_fixture()
+
     {:ok, scraper} =
       attrs
       |> Enum.into(%{
@@ -18,6 +22,7 @@ defmodule Crawlex.ScrapersFixtures do
         images: "some images",
         name: "some name",
         price: "some price",
+        site_id: site_id,
         sizes: %{},
         sku: "some sku",
         type: "some type",
