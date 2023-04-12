@@ -34,7 +34,7 @@ defmodule Crawlex.Scrapers.ProductScraper do
 
     Logger.info(item)
 
-    item
+    %Crawly.ParsedItem{items: [item]}
   end
 
   def sku, do: "#divUrunKodu"
