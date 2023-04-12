@@ -51,6 +51,7 @@ defmodule Crawlex.MixProject do
       {:plug_cowboy, "~> 2.5"},
       {:dialyxir, "~> 1.3", only: [:dev], runtime: false},
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
+      {:git_hooks, "~> 0.7.0", only: [:dev], runtime: false},
       {:crawly, "~> 0.14.0"},
       {:floki, "~> 0.33.0"}
     ]

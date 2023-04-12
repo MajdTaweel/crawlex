@@ -16,7 +16,8 @@ defmodule Crawlex.SitesFixtures do
     {:ok, site} =
       attrs
       |> Enum.into(%{
-        base_url: unique_site_base_url()
+        base_url: unique_site_base_url(),
+        name: "some name"
       })
       |> Crawlex.Sites.create_site()
 

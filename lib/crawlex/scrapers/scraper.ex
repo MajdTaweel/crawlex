@@ -1,4 +1,6 @@
 defmodule Crawlex.Scrapers.Scraper do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -21,8 +23,32 @@ defmodule Crawlex.Scrapers.Scraper do
   @doc false
   def changeset(scraper, attrs) do
     scraper
-    |> cast(attrs, [:base_url, :sku, :name, :images, :sizes, :price, :color, :brand, :description, :category, :vendor])
-    |> validate_required([:base_url, :sku, :name, :images, :sizes, :price, :color, :brand, :description, :category, :vendor])
+    |> cast(attrs, [
+      :base_url,
+      :sku,
+      :name,
+      :images,
+      :sizes,
+      :price,
+      :color,
+      :brand,
+      :description,
+      :category,
+      :vendor
+    ])
+    |> validate_required([
+      :base_url,
+      :sku,
+      :name,
+      :images,
+      :sizes,
+      :price,
+      :color,
+      :brand,
+      :description,
+      :category,
+      :vendor
+    ])
     |> unique_constraint(:base_url)
   end
 end

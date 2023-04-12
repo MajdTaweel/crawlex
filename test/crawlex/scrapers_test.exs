@@ -8,7 +8,19 @@ defmodule Crawlex.ScrapersTest do
 
     import Crawlex.ScrapersFixtures
 
-    @invalid_attrs %{base_url: nil, brand: nil, category: nil, color: nil, description: nil, images: nil, name: nil, price: nil, sizes: nil, sku: nil, vendor: nil}
+    @invalid_attrs %{
+      base_url: nil,
+      brand: nil,
+      category: nil,
+      color: nil,
+      description: nil,
+      images: nil,
+      name: nil,
+      price: nil,
+      sizes: nil,
+      sku: nil,
+      vendor: nil
+    }
 
     test "list_scrapers/0 returns all scrapers" do
       scraper = scraper_fixture()
@@ -21,7 +33,19 @@ defmodule Crawlex.ScrapersTest do
     end
 
     test "create_scraper/1 with valid data creates a scraper" do
-      valid_attrs = %{base_url: "some base_url", brand: "some brand", category: "some category", color: "some color", description: "some description", images: "some images", name: "some name", price: "some price", sizes: "some sizes", sku: "some sku", vendor: "some vendor"}
+      valid_attrs = %{
+        base_url: "some base_url",
+        brand: "some brand",
+        category: "some category",
+        color: "some color",
+        description: "some description",
+        images: "some images",
+        name: "some name",
+        price: "some price",
+        sizes: "some sizes",
+        sku: "some sku",
+        vendor: "some vendor"
+      }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.create_scraper(valid_attrs)
       assert scraper.base_url == "some base_url"
@@ -43,7 +67,20 @@ defmodule Crawlex.ScrapersTest do
 
     test "update_scraper/2 with valid data updates the scraper" do
       scraper = scraper_fixture()
-      update_attrs = %{base_url: "some updated base_url", brand: "some updated brand", category: "some updated category", color: "some updated color", description: "some updated description", images: "some updated images", name: "some updated name", price: "some updated price", sizes: "some updated sizes", sku: "some updated sku", vendor: "some updated vendor"}
+
+      update_attrs = %{
+        base_url: "some updated base_url",
+        brand: "some updated brand",
+        category: "some updated category",
+        color: "some updated color",
+        description: "some updated description",
+        images: "some updated images",
+        name: "some updated name",
+        price: "some updated price",
+        sizes: "some updated sizes",
+        sku: "some updated sku",
+        vendor: "some updated vendor"
+      }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.update_scraper(scraper, update_attrs)
       assert scraper.base_url == "some updated base_url"

@@ -3,8 +3,8 @@ defmodule Crawlex.Repo.Migrations.CreateSites do
 
   def change do
     create table(:sites) do
-      add :name, :string
       add :base_url, :string
+      add :name, :string
 
       timestamps()
     end

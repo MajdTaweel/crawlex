@@ -8,7 +8,7 @@ defmodule Crawlex.SitesTest do
 
     import Crawlex.SitesFixtures
 
-    @invalid_attrs %{base_url: nil}
+    @invalid_attrs %{base_url: nil, name: nil}
 
     test "list_sites/0 returns all sites" do
       site = site_fixture()
@@ -21,10 +21,11 @@ defmodule Crawlex.SitesTest do
     end
 
     test "create_site/1 with valid data creates a site" do
-      valid_attrs = %{base_url: "some base_url"}
+      valid_attrs = %{base_url: "some base_url", name: "some name"}
 
       assert {:ok, %Site{} = site} = Sites.create_site(valid_attrs)
       assert site.base_url == "some base_url"
+      assert site.name == "some name"
     end
 
     test "create_site/1 with invalid data returns error changeset" do
@@ -33,10 +34,11 @@ defmodule Crawlex.SitesTest do
 
     test "update_site/2 with valid data updates the site" do
       site = site_fixture()
-      update_attrs = %{base_url: "some updated base_url"}
+      update_attrs = %{base_url: "some updated base_url", name: "some updated name"}
 
       assert {:ok, %Site{} = site} = Sites.update_site(site, update_attrs)
       assert site.base_url == "some updated base_url"
+      assert site.name == "some updated name"
     end
 
     test "update_site/2 with invalid data returns error changeset" do

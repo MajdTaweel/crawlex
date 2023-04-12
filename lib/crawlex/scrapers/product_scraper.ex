@@ -1,13 +1,16 @@
 defmodule Crawlex.Scrapers.ProductScraper do
+  @moduledoc """
+  This module is responsible for scraping e-commerce products.
+  """
   use Crawly.Spider
 
   alias Crawlex.Scrapers.Scraper
 
   @impl Crawly.Spider
-  def base_url(), do: ""
+  def base_url, do: ""
 
   @impl Crawly.Spider
-  def init(), do: [start_urls: []]
+  def init, do: [start_urls: []]
 
   @impl Crawly.Spider
   def init(options: [scraper: %Scraper{}, start_urls: start_urls]) do
