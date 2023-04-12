@@ -4,7 +4,7 @@ defmodule Crawlex.Scrapers.ProductScraper do
   """
   use Crawly.Spider
 
-  alias Crawlex.Scrapers.Scraper
+  alias Crawlex.Scrapers
 
   @impl Crawly.Spider
   def base_url, do: ""
@@ -13,11 +13,10 @@ defmodule Crawlex.Scrapers.ProductScraper do
   def init, do: [start_urls: []]
 
   @impl Crawly.Spider
-  def init(options: [scraper: %Scraper{}, start_urls: start_urls]) do
+  def init(kw) do
+    start_urls = Keyword.get(kw, :start_urls)
+
     [
-      # start_urls: [
-      #   "https://www.nisantasishoes.com/tr/nancy-acik-bej-mat-burun-metal-arka-bagli-kadin-topuklu-ayakkabi-11498"
-      # ]
       start_urls: start_urls
     ]
   end
@@ -27,19 +26,17 @@ defmodule Crawlex.Scrapers.ProductScraper do
     # Parse response body to document
     {:ok, document} = Floki.parse_document(response.body)
 
+    %{sku: sku, name: name} = Scrapers.get_scraper_by_url!(response.request.url)
+
     item = %{
-      sku: text(document, sku()) |> String.replace(~r"[\(\)]", ""),
-      name: text(document, name())
+      sku: text(document, sku) |> String.replace(~r"[\(\)]", ""),
+      name: text(document, name)
     }
 
     Logger.info(item)
 
     %Crawly.ParsedItem{items: [item]}
   end
-
-  def sku, do: "#divUrunKodu"
-
-  def name, do: ".ProductName"
 
   defp text(document, selector) do
     document

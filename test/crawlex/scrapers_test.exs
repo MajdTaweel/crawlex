@@ -34,7 +34,7 @@ defmodule Crawlex.ScrapersTest do
 
     test "create_scraper/1 with valid data creates a scraper" do
       valid_attrs = %{
-        base_url: "some base_url",
+        base_url: "https://www.some-base-url.com",
         brand: "some brand",
         category: "some category",
         color: "some color",
@@ -48,7 +48,7 @@ defmodule Crawlex.ScrapersTest do
       }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.create_scraper(valid_attrs)
-      assert scraper.base_url == "some base_url"
+      assert scraper.base_url == "https://www.some-base-url.com"
       assert scraper.brand == "some brand"
       assert scraper.category == "some category"
       assert scraper.color == "some color"
@@ -69,7 +69,7 @@ defmodule Crawlex.ScrapersTest do
       scraper = scraper_fixture()
 
       update_attrs = %{
-        base_url: "some updated base_url",
+        base_url: "https://www.some-updated-base-url.com",
         brand: "some updated brand",
         category: "some updated category",
         color: "some updated color",
@@ -83,7 +83,7 @@ defmodule Crawlex.ScrapersTest do
       }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.update_scraper(scraper, update_attrs)
-      assert scraper.base_url == "some updated base_url"
+      assert scraper.base_url == "https://www.some-updated-base-url.com"
       assert scraper.brand == "some updated brand"
       assert scraper.category == "some updated category"
       assert scraper.color == "some updated color"

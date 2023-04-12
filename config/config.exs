@@ -7,6 +7,15 @@
 # General application configuration
 import Config
 
+config :crawly,
+  middlewares: [
+    # Crawly.Middlewares.DomainFilter,
+    Crawly.Middlewares.UniqueRequest,
+    Crawly.Middlewares.RobotsTxt,
+    # {Crawly.Middlewares.UserAgent, user_agents: ["My Bot"]},
+    {Crawly.Middlewares.RequestOptions, [timeout: 30_000, recv_timeout: 15000]}
+  ]
+
 if Mix.env() == :dev do
   config :git_hooks,
     auto_install: true,

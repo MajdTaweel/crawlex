@@ -51,12 +51,8 @@ defmodule Crawlex.Scrapers do
       ** (Ecto.NoResultsError)
 
   """
-  def get_scraper_by_url!(url) do
-    base_url =
-      url
-      |> String.split("/")
-      |> Enum.take(3)
-      |> Enum.join("/")
+  def get_scraper_by_url!(url) when is_binary(url) do
+    base_url = host_from_url(url)
 
     Repo.get_by!(Scraper, base_url: base_url)
   end
@@ -124,5 +120,11 @@ defmodule Crawlex.Scrapers do
   """
   def change_scraper(%Scraper{} = scraper, attrs \\ %{}) do
     Scraper.changeset(scraper, attrs)
+  end
+
+  defp host_from_url(url) do
+    url = URI.new!(url)
+
+    String.trim(url.host, "/")
   end
 end

@@ -7,7 +7,8 @@ defmodule Crawlex.ScrapersFixtures do
   @doc """
   Generate a unique scraper base_url.
   """
-  def unique_scraper_base_url, do: "some base_url#{System.unique_integer([:positive])}"
+  def unique_scraper_base_url,
+    do: "https://www.some-domain#{System.unique_integer([:positive])}.com"
 
   @doc """
   Generate a scraper.
