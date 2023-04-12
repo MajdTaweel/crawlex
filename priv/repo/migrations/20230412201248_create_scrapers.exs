@@ -14,7 +14,6 @@ defmodule Crawlex.Repo.Migrations.CreateScrapers do
       add :category, :string
       add :wait_for_selectors, :map
       add :wait_for_js, :map
-      add :clean_url, :string
       add :type, :string
       add :site_id, references(:sites, on_delete: :nothing)
 

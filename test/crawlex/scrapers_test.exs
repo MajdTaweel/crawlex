@@ -11,7 +11,6 @@ defmodule Crawlex.ScrapersTest do
     @invalid_attrs %{
       brand: nil,
       category: nil,
-      clean_url: nil,
       colors: nil,
       description: nil,
       images: nil,
@@ -38,7 +37,6 @@ defmodule Crawlex.ScrapersTest do
       valid_attrs = %{
         brand: "some brand",
         category: "some category",
-        clean_url: "some clean_url",
         colors: %{},
         description: "some description",
         images: "some images",
@@ -54,7 +52,6 @@ defmodule Crawlex.ScrapersTest do
       assert {:ok, %Scraper{} = scraper} = Scrapers.create_scraper(valid_attrs)
       assert scraper.brand == "some brand"
       assert scraper.category == "some category"
-      assert scraper.clean_url == "some clean_url"
       assert scraper.colors == []
       assert scraper.description == "some description"
       assert scraper.images == "some images"
@@ -77,7 +74,6 @@ defmodule Crawlex.ScrapersTest do
       update_attrs = %{
         brand: "some updated brand",
         category: "some updated category",
-        clean_url: "some updated clean_url",
         colors: %{},
         description: "some updated description",
         images: "some updated images",
@@ -93,7 +89,6 @@ defmodule Crawlex.ScrapersTest do
       assert {:ok, %Scraper{} = scraper} = Scrapers.update_scraper(scraper, update_attrs)
       assert scraper.brand == "some updated brand"
       assert scraper.category == "some updated category"
-      assert scraper.clean_url == "some updated clean_url"
       assert scraper.colors == []
       assert scraper.description == "some updated description"
       assert scraper.images == "some updated images"

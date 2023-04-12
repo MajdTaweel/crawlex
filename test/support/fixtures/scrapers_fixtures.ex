@@ -13,7 +13,6 @@ defmodule Crawlex.ScrapersFixtures do
       |> Enum.into(%{
         brand: "some brand",
         category: "some category",
-        clean_url: "some clean_url",
         colors: %{},
         description: "some description",
         images: "some images",

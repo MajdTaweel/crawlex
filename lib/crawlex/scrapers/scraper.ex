@@ -7,7 +7,6 @@ defmodule Crawlex.Scrapers.Scraper do
   schema "scrapers" do
     field :brand, :string
     field :category, :string
-    field :clean_url, :string
 
     embeds_many :colors, Color, primary_key: false, on_replace: :delete do
       field :list, :string
@@ -55,7 +54,6 @@ defmodule Crawlex.Scrapers.Scraper do
       :brand,
       :description,
       :category,
-      :clean_url,
       :type
     ])
     |> cast_embed(:colors, with: &color_changeset/2)
@@ -70,7 +68,6 @@ defmodule Crawlex.Scrapers.Scraper do
       :brand,
       :description,
       :category,
-      :clean_url,
       :type
     ])
   end
