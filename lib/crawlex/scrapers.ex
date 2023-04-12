@@ -47,14 +47,18 @@ defmodule Crawlex.Scrapers do
       iex> get_scraper_by_url!(https://example.com/example-slug)
       %Scraper{}
 
-      iex> get_scraper_by_url!(https://example.com/example-slug-2)
+      iex> get_scraper_by_url!(https://example.com/wrong-slug)
       ** (Ecto.NoResultsError)
 
   """
-  def get_scraper_by_url!(url) when is_binary(url) do
-    base_url = host_from_url(url)
+  def get_scraper_by_url!(url) do
+    base_url = base_url_from_url!(url)
 
-    Repo.get_by!(Scraper, base_url: base_url)
+    Repo.one!(
+      from s in Scraper,
+        join: si in assoc(s, :site),
+        where: si.base_url == ^base_url
+    )
   end
 
   @doc """
@@ -122,9 +126,13 @@ defmodule Crawlex.Scrapers do
     Scraper.changeset(scraper, attrs)
   end
 
-  defp host_from_url(url) do
-    url = URI.new!(url)
+  defp base_url_from_url!(url) do
+    case URI.new!(url) do
+      %{host: host, scheme: scheme} when not is_nil(host) and not is_nil(scheme) ->
+        "#{scheme}://#{String.trim(host, "/")}"
 
-    String.trim(url.host, "/")
+      _ ->
+        raise "Invalid URL"
+    end
   end
 end

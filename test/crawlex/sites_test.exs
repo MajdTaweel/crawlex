@@ -8,7 +8,13 @@ defmodule Crawlex.SitesTest do
 
     import Crawlex.SitesFixtures
 
-    @invalid_attrs %{base_url: nil, name: nil}
+    @invalid_attrs %{
+      base_url: nil,
+      cookies: nil,
+      country_code: nil,
+      name: nil,
+      query_parameters: nil
+    }
 
     test "list_sites/0 returns all sites" do
       site = site_fixture()
@@ -21,11 +27,20 @@ defmodule Crawlex.SitesTest do
     end
 
     test "create_site/1 with valid data creates a site" do
-      valid_attrs = %{base_url: "some base_url", name: "some name"}
+      valid_attrs = %{
+        base_url: "https://some-base_url.com",
+        cookies: %{},
+        country_code: "some country_code",
+        name: "some name",
+        query_parameters: %{}
+      }
 
       assert {:ok, %Site{} = site} = Sites.create_site(valid_attrs)
-      assert site.base_url == "some base_url"
+      assert site.base_url == "https://some-base_url.com"
+      assert site.cookies == []
+      assert site.country_code == "some country_code"
       assert site.name == "some name"
+      assert site.query_parameters == []
     end
 
     test "create_site/1 with invalid data returns error changeset" do
@@ -34,11 +49,21 @@ defmodule Crawlex.SitesTest do
 
     test "update_site/2 with valid data updates the site" do
       site = site_fixture()
-      update_attrs = %{base_url: "some updated base_url", name: "some updated name"}
+
+      update_attrs = %{
+        base_url: "https://some-updated-base_url",
+        cookies: %{},
+        country_code: "some updated country_code",
+        name: "some updated name",
+        query_parameters: %{}
+      }
 
       assert {:ok, %Site{} = site} = Sites.update_site(site, update_attrs)
-      assert site.base_url == "some updated base_url"
+      assert site.base_url == "https://some-updated-base_url"
+      assert site.cookies == []
+      assert site.country_code == "some updated country_code"
       assert site.name == "some updated name"
+      assert site.query_parameters == []
     end
 
     test "update_site/2 with invalid data returns error changeset" do

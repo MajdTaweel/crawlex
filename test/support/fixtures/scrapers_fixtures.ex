@@ -5,29 +5,25 @@ defmodule Crawlex.ScrapersFixtures do
   """
 
   @doc """
-  Generate a unique scraper base_url.
-  """
-  def unique_scraper_base_url,
-    do: "https://www.some-domain#{System.unique_integer([:positive])}.com"
-
-  @doc """
   Generate a scraper.
   """
   def scraper_fixture(attrs \\ %{}) do
     {:ok, scraper} =
       attrs
       |> Enum.into(%{
-        base_url: unique_scraper_base_url(),
         brand: "some brand",
         category: "some category",
-        color: "some color",
+        clean_url: "some clean_url",
+        colors: %{},
         description: "some description",
         images: "some images",
         name: "some name",
         price: "some price",
-        sizes: "some sizes",
+        sizes: %{},
         sku: "some sku",
-        vendor: "some vendor"
+        type: "some type",
+        wait_for_js: %{},
+        wait_for_selector: %{}
       })
       |> Crawlex.Scrapers.create_scraper()
 

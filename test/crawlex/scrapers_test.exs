@@ -9,17 +9,19 @@ defmodule Crawlex.ScrapersTest do
     import Crawlex.ScrapersFixtures
 
     @invalid_attrs %{
-      base_url: nil,
       brand: nil,
       category: nil,
-      color: nil,
+      clean_url: nil,
+      colors: nil,
       description: nil,
       images: nil,
       name: nil,
       price: nil,
       sizes: nil,
       sku: nil,
-      vendor: nil
+      type: nil,
+      wait_for_js: nil,
+      wait_for_selectors: nil
     }
 
     test "list_scrapers/0 returns all scrapers" do
@@ -34,31 +36,35 @@ defmodule Crawlex.ScrapersTest do
 
     test "create_scraper/1 with valid data creates a scraper" do
       valid_attrs = %{
-        base_url: "https://www.some-base-url.com",
         brand: "some brand",
         category: "some category",
-        color: "some color",
+        clean_url: "some clean_url",
+        colors: %{},
         description: "some description",
         images: "some images",
         name: "some name",
         price: "some price",
-        sizes: "some sizes",
+        sizes: %{},
         sku: "some sku",
-        vendor: "some vendor"
+        type: "some type",
+        wait_for_js: %{},
+        wait_for_selectors: %{}
       }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.create_scraper(valid_attrs)
-      assert scraper.base_url == "https://www.some-base-url.com"
       assert scraper.brand == "some brand"
       assert scraper.category == "some category"
-      assert scraper.color == "some color"
+      assert scraper.clean_url == "some clean_url"
+      assert scraper.colors == []
       assert scraper.description == "some description"
       assert scraper.images == "some images"
       assert scraper.name == "some name"
       assert scraper.price == "some price"
-      assert scraper.sizes == "some sizes"
+      assert scraper.sizes == []
       assert scraper.sku == "some sku"
-      assert scraper.vendor == "some vendor"
+      assert scraper.type == "some type"
+      assert scraper.wait_for_js == []
+      assert scraper.wait_for_selectors == []
     end
 
     test "create_scraper/1 with invalid data returns error changeset" do
@@ -69,31 +75,35 @@ defmodule Crawlex.ScrapersTest do
       scraper = scraper_fixture()
 
       update_attrs = %{
-        base_url: "https://www.some-updated-base-url.com",
         brand: "some updated brand",
         category: "some updated category",
-        color: "some updated color",
+        clean_url: "some updated clean_url",
+        colors: %{},
         description: "some updated description",
         images: "some updated images",
         name: "some updated name",
         price: "some updated price",
-        sizes: "some updated sizes",
+        sizes: %{},
         sku: "some updated sku",
-        vendor: "some updated vendor"
+        type: "some updated type",
+        wait_for_js: %{},
+        wait_for_selectors: %{}
       }
 
       assert {:ok, %Scraper{} = scraper} = Scrapers.update_scraper(scraper, update_attrs)
-      assert scraper.base_url == "https://www.some-updated-base-url.com"
       assert scraper.brand == "some updated brand"
       assert scraper.category == "some updated category"
-      assert scraper.color == "some updated color"
+      assert scraper.clean_url == "some updated clean_url"
+      assert scraper.colors == []
       assert scraper.description == "some updated description"
       assert scraper.images == "some updated images"
       assert scraper.name == "some updated name"
       assert scraper.price == "some updated price"
-      assert scraper.sizes == "some updated sizes"
+      assert scraper.sizes == []
       assert scraper.sku == "some updated sku"
-      assert scraper.vendor == "some updated vendor"
+      assert scraper.type == "some updated type"
+      assert scraper.wait_for_js == []
+      assert scraper.wait_for_selectors == []
     end
 
     test "update_scraper/2 with invalid data returns error changeset" do

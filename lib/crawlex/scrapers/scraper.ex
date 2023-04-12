@@ -5,17 +5,41 @@ defmodule Crawlex.Scrapers.Scraper do
   import Ecto.Changeset
 
   schema "scrapers" do
-    field :base_url, :string
     field :brand, :string
     field :category, :string
-    field :color, :string
+    field :clean_url, :string
+
+    embeds_many :colors, Color, primary_key: false, on_replace: :delete do
+      field :list, :string
+      field :name, :string
+      field :quantity, :string
+      field :selected, :string
+      field :action, :string
+    end
+
     field :description, :string
     field :images, :string
     field :name, :string
     field :price, :string
-    field :sizes, :string
+
+    embeds_many :sizes, Size, primary_key: false, on_replace: :delete do
+      field :list, :string
+      field :name, :string
+      field :quantity, :string
+    end
+
     field :sku, :string
-    field :vendor, :string
+    field :type, :string
+
+    embeds_many :wait_for_js, WaitForJs, primary_key: false, on_replace: :delete do
+      field :value, :string
+    end
+
+    embeds_many :wait_for_selectors, WaitForSelector, primary_key: false, on_replace: :delete do
+      field :value, :string
+    end
+
+    belongs_to :site, Crawlex.Sites.Site
 
     timestamps()
   end
@@ -24,54 +48,50 @@ defmodule Crawlex.Scrapers.Scraper do
   def changeset(scraper, attrs) do
     scraper
     |> cast(attrs, [
-      :base_url,
       :sku,
       :name,
       :images,
-      :sizes,
       :price,
-      :color,
       :brand,
       :description,
       :category,
-      :vendor
+      :clean_url,
+      :type
     ])
+    |> cast_embed(:colors, with: &color_changeset/2)
+    |> cast_embed(:sizes, with: &size_changeset/2)
+    |> cast_embed(:wait_for_js, with: &wait_for_js_changeset/2)
+    |> cast_embed(:wait_for_selectors, with: &wait_for_selector_changeset/2)
     |> validate_required([
-      :base_url,
       :sku,
       :name,
       :images,
-      :sizes,
       :price,
-      :color,
       :brand,
       :description,
       :category,
-      :vendor
+      :clean_url,
+      :type
     ])
-    |> validate_and_trim_base_url()
-    |> unique_constraint(:base_url)
   end
 
-  defp validate_and_trim_base_url(scraper) do
-    base_url = get_field(scraper, :base_url)
-    maybe_validate_and_trim_base_url(scraper, base_url)
+  defp color_changeset(color, attrs) do
+    color
+    |> cast(attrs, [:list, :name, :quantity, :selected, :action])
   end
 
-  def maybe_validate_and_trim_base_url(scraper, nil), do: scraper
+  defp size_changeset(size, attrs) do
+    size
+    |> cast(attrs, [:list, :name, :quantity])
+  end
 
-  def maybe_validate_and_trim_base_url(scraper, base_url) do
-    case URI.new(base_url) do
-      {:ok, %{host: host, scheme: scheme}} when not is_nil(host) and not is_nil(scheme) ->
-        base_url = "#{scheme}://#{String.trim(host, "/")}"
+  defp wait_for_js_changeset(wait_for_js, attrs) do
+    wait_for_js
+    |> cast(attrs, [:value])
+  end
 
-        put_change(scraper, :base_url, base_url)
-
-      {:error, part} ->
-        add_error(scraper, :base_url, part)
-
-      _ ->
-        add_error(scraper, :base_url, "Invalid URL")
-    end
+  defp wait_for_selector_changeset(wait_for_selector, attrs) do
+    wait_for_selector
+    |> cast(attrs, [:value])
   end
 end
