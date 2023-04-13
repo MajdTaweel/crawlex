@@ -1,10 +1,10 @@
-defmodule Crawlex.Scrapers.Scraper do
+defmodule Crawlex.Selectors.Selector do
   @moduledoc false
 
   use Ecto.Schema
   import Ecto.Changeset
 
-  schema "scrapers" do
+  schema "selectors" do
     field :brand, :string
     field :category, :string
 
@@ -44,8 +44,8 @@ defmodule Crawlex.Scrapers.Scraper do
   end
 
   @doc false
-  def changeset(scraper, attrs) do
-    scraper
+  def changeset(selector, attrs) do
+    selector
     |> cast(attrs, [
       :sku,
       :name,

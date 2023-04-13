@@ -22,7 +22,7 @@ defmodule Crawlex.Sites.Site do
       field :value, :string
     end
 
-    has_one :scraper, Crawlex.Scrapers.Scraper
+    has_one :selector, Crawlex.Selectors.Selector
 
     timestamps()
   end

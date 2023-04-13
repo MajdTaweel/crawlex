@@ -1,8 +1,8 @@
-defmodule Crawlex.Repo.Migrations.CreateScrapers do
+defmodule Crawlex.Repo.Migrations.CreateSelectors do
   use Ecto.Migration
 
   def change do
-    create table(:scrapers) do
+    create table(:selectors) do
       add :sku, :string
       add :name, :string
       add :images, :string
@@ -20,6 +20,6 @@ defmodule Crawlex.Repo.Migrations.CreateScrapers do
       timestamps()
     end
 
-    create index(:scrapers, [:site_id])
+    create index(:selectors, [:site_id])
   end
 end

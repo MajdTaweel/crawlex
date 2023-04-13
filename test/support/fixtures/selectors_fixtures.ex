@@ -1,18 +1,18 @@
-defmodule Crawlex.ScrapersFixtures do
+defmodule Crawlex.SelectorsFixtures do
   @moduledoc """
   This module defines test helpers for creating
-  entities via the `Crawlex.Scrapers` context.
+  entities via the `Crawlex.Selectors` context.
   """
 
   alias Crawlex.SitesFixtures
 
   @doc """
-  Generate a scraper.
+  Generate a selector.
   """
-  def scraper_fixture(attrs \\ %{}) do
+  def selector_fixture(attrs \\ %{}) do
     %{id: site_id} = SitesFixtures.site_fixture()
 
-    {:ok, scraper} =
+    {:ok, selector} =
       attrs
       |> Enum.into(%{
         brand: "some brand",
@@ -29,8 +29,8 @@ defmodule Crawlex.ScrapersFixtures do
         wait_for_js: %{},
         wait_for_selector: %{}
       })
-      |> Crawlex.Scrapers.create_scraper()
+      |> Crawlex.Selectors.create_selector()
 
-    scraper
+    selector
   end
 end

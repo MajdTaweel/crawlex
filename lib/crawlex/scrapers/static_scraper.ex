@@ -1,10 +1,10 @@
-defmodule Crawlex.Scrapers.ProductScraper do
+defmodule Crawlex.Scrapers.StaticScraper do
   @moduledoc """
-  This module is responsible for scraping e-commerce products.
+  This module is responsible for scraping e-commerce products by parsing the response from provided urls requests.
   """
   use Crawly.Spider
 
-  alias Crawlex.Scrapers
+  alias Crawlex.Selectors
 
   @impl Crawly.Spider
   def base_url, do: ""
@@ -23,10 +23,9 @@ defmodule Crawlex.Scrapers.ProductScraper do
 
   @impl Crawly.Spider
   def parse_item(response) do
-    # Parse response body to document
     {:ok, document} = Floki.parse_document(response.body)
 
-    %{sku: sku, name: name} = Scrapers.get_scraper_by_url!(response.request.url)
+    %{sku: sku, name: name} = Selectors.get_selector_by_url!(response.request.url)
 
     item = %{
       sku: text(document, sku) |> String.replace(~r"[\(\)]", ""),
