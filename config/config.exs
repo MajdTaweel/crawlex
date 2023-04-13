@@ -8,11 +8,13 @@
 import Config
 
 config :crawly,
+  pipelines: [
+    {Crawly.Pipelines.Validate, fields: [:sku, :name]}
+  ],
   middlewares: [
-    # Crawly.Middlewares.DomainFilter,
     Crawly.Middlewares.UniqueRequest,
     Crawly.Middlewares.RobotsTxt,
-    # {Crawly.Middlewares.UserAgent, user_agents: ["My Bot"]},
+    Crawlex.Middlewares.UserAgent,
     {Crawly.Middlewares.RequestOptions, [timeout: 30_000, recv_timeout: 15000]}
   ]
 

@@ -53,7 +53,8 @@ defmodule Crawlex.MixProject do
       {:credo, "~> 1.7", only: [:dev, :test], runtime: false},
       {:git_hooks, "~> 0.7.0", only: [:dev], runtime: false},
       {:crawly, "~> 0.14.0"},
-      {:floki, "~> 0.33.0"}
+      {:floki, "~> 0.34.0"},
+      {:pumba, git: "https://github.com/sultaniman/pumba.git"}
     ]
   end
 
