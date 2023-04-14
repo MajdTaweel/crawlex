@@ -30,48 +30,34 @@ defmodule Crawlex.Selectors.Selector do
     field :sku, :string
     field :type, :string
 
-    embeds_many :wait_for_js, WaitForJs, primary_key: false, on_replace: :delete do
-      field :value, :string
-    end
-
-    embeds_many :wait_for_selectors, WaitForSelector, primary_key: false, on_replace: :delete do
-      field :value, :string
-    end
+    field :wait_for_js, {:array, :string}
+    field :wait_for_selectors, {:array, :string}
 
     belongs_to :site, Crawlex.Sites.Site
 
     timestamps()
   end
 
+  @attrs [
+    :sku,
+    :name,
+    :images,
+    :price,
+    :brand,
+    :description,
+    :category,
+    :type,
+    :wait_for_js,
+    :wait_for_selectors,
+    :site_id
+  ]
   @doc false
   def changeset(selector, attrs) do
     selector
-    |> cast(attrs, [
-      :sku,
-      :name,
-      :images,
-      :price,
-      :brand,
-      :description,
-      :category,
-      :type,
-      :site_id
-    ])
+    |> cast(attrs, @attrs)
     |> cast_embed(:colors, with: &color_changeset/2)
     |> cast_embed(:sizes, with: &size_changeset/2)
-    |> cast_embed(:wait_for_js, with: &wait_for_js_changeset/2)
-    |> cast_embed(:wait_for_selectors, with: &wait_for_selector_changeset/2)
-    |> validate_required([
-      :sku,
-      :name,
-      :images,
-      :price,
-      :brand,
-      :description,
-      :category,
-      :type,
-      :site_id
-    ])
+    |> validate_required(@attrs)
   end
 
   defp color_changeset(color, attrs) do
@@ -82,15 +68,5 @@ defmodule Crawlex.Selectors.Selector do
   defp size_changeset(size, attrs) do
     size
     |> cast(attrs, [:list, :name, :quantity])
-  end
-
-  defp wait_for_js_changeset(wait_for_js, attrs) do
-    wait_for_js
-    |> cast(attrs, [:value])
-  end
-
-  defp wait_for_selector_changeset(wait_for_selector, attrs) do
-    wait_for_selector
-    |> cast(attrs, [:value])
   end
 end

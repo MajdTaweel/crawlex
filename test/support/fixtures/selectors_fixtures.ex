@@ -26,8 +26,8 @@ defmodule Crawlex.SelectorsFixtures do
         sizes: %{},
         sku: "some sku",
         type: "some type",
-        wait_for_js: %{},
-        wait_for_selector: %{}
+        wait_for_js: ["option1", "option2"],
+        wait_for_selectors: ["option1", "option2"]
       })
       |> Crawlex.Selectors.create_selector()
 

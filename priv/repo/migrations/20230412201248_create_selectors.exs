@@ -12,8 +12,8 @@ defmodule Crawlex.Repo.Migrations.CreateSelectors do
       add :brand, :string
       add :description, :string
       add :category, :string
-      add :wait_for_selectors, :map
-      add :wait_for_js, :map
+      add :wait_for_selectors, {:array, :string}
+      add :wait_for_js, {:array, :string}
       add :type, :string
       add :site_id, references(:sites, on_delete: :nothing)
 

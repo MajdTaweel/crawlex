@@ -50,8 +50,8 @@ defmodule Crawlex.SelectorsTest do
         sizes: %{},
         sku: "some sku",
         type: "some type",
-        wait_for_js: %{},
-        wait_for_selectors: %{}
+        wait_for_js: ["option1", "option2"],
+        wait_for_selectors: ["option1", "option2"]
       }
 
       assert {:ok, %Selector{} = selector} = Selectors.create_selector(valid_attrs)
@@ -66,8 +66,8 @@ defmodule Crawlex.SelectorsTest do
       assert selector.sizes == []
       assert selector.sku == "some sku"
       assert selector.type == "some type"
-      assert selector.wait_for_js == []
-      assert selector.wait_for_selectors == []
+      assert selector.wait_for_js == ["option1", "option2"]
+      assert selector.wait_for_selectors == ["option1", "option2"]
     end
 
     test "create_selector/1 with invalid data returns error changeset" do
@@ -88,8 +88,8 @@ defmodule Crawlex.SelectorsTest do
         sizes: %{},
         sku: "some updated sku",
         type: "some updated type",
-        wait_for_js: %{},
-        wait_for_selectors: %{}
+        wait_for_js: ["option1"],
+        wait_for_selectors: ["option1"]
       }
 
       assert {:ok, %Selector{} = selector} = Selectors.update_selector(selector, update_attrs)
@@ -103,8 +103,8 @@ defmodule Crawlex.SelectorsTest do
       assert selector.sizes == []
       assert selector.sku == "some updated sku"
       assert selector.type == "some updated type"
-      assert selector.wait_for_js == []
-      assert selector.wait_for_selectors == []
+      assert selector.wait_for_js == ["option1"]
+      assert selector.wait_for_selectors == ["option1"]
     end
 
     test "update_selector/2 with invalid data returns error changeset" do
