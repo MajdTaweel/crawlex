@@ -35,7 +35,12 @@ defmodule Crawlex.Sites do
       ** (Ecto.NoResultsError)
 
   """
-  def get_site!(id), do: Repo.get!(Site, id)
+  def get_site!(id) do
+    Site
+    |> Repo.get!(id)
+
+    # |> Repo.preload(:selector)
+  end
 
   @doc """
   Creates a site.

@@ -41,6 +41,7 @@ defmodule Crawlex.Sites.Site do
     |> validate_required(@fields)
     |> validate_and_trim_base_url()
     |> unique_constraint(:base_url)
+    |> cast_assoc(:selector)
   end
 
   defp cookie_changeset(cookie, attrs) do

@@ -71,12 +71,4 @@ defmodule CrawlexWeb.Components.DynamicListForm do
 
     {:noreply, assign(socket, :form, form)}
   end
-
-  defp title_from_atom(atom) when is_atom(atom) do
-    atom
-    |> Atom.to_string()
-    |> String.replace("_", " ")
-    |> String.split(" ")
-    |> Enum.map_join(" ", &String.capitalize/1)
-  end
 end

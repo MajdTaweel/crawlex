@@ -36,6 +36,12 @@ defmodule CrawlexWeb.Components.SiteForm do
           fields={[:name, :value]}
         />
 
+        <.live_component
+          module={CrawlexWeb.Components.SelectorsForm}
+          id="selectors-form-group"
+          form={@form}
+        />
+
         <:actions>
           <.button>Save</.button>
         </:actions>
@@ -45,10 +51,12 @@ defmodule CrawlexWeb.Components.SiteForm do
   end
 
   def handle_event("validate", %{"site" => params}, socket) do
+    site = socket.assigns.form.data
+
     form =
-      socket.assigns.form.data
+      site
       |> Sites.change_site(params)
-      |> Map.put(:action, :update)
+      |> Map.put(:action, action(site.id))
       |> to_form()
 
     {:noreply, assign(socket, form: form)}
@@ -61,4 +69,7 @@ defmodule CrawlexWeb.Components.SiteForm do
   defp country_codes do
     Countries.all() |> Enum.map(&{:"#{&1.name}", &1.alpha2})
   end
+
+  defp action(nil), do: :insert
+  defp action(_), do: :update
 end

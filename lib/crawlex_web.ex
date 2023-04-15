@@ -54,6 +54,9 @@ defmodule CrawlexWeb do
       use Phoenix.LiveView,
         layout: {CrawlexWeb.Layouts, :app}
 
+      # Import custom helpers
+      import CrawlexWeb.Live.Helpers
+
       unquote(html_helpers())
     end
   end
@@ -61,6 +64,9 @@ defmodule CrawlexWeb do
   def live_component do
     quote do
       use Phoenix.LiveComponent
+
+      # Import custom helpers
+      import CrawlexWeb.Live.Helpers
 
       unquote(html_helpers())
     end
