@@ -27,13 +27,18 @@ defmodule Crawlex.Sites.Site do
     timestamps()
   end
 
+  @fields [
+    :name,
+    :base_url,
+    :country_code
+  ]
   @doc false
   def changeset(site, attrs) do
     site
-    |> cast(attrs, [:name, :base_url, :country_code])
+    |> cast(attrs, @fields)
     |> cast_embed(:cookies, with: &cookie_changeset/2)
     |> cast_embed(:query_parameters, with: &query_parameter_changeset/2)
-    |> validate_required([:name, :base_url, :country_code])
+    |> validate_required(@fields)
     |> validate_and_trim_base_url()
     |> unique_constraint(:base_url)
   end

@@ -38,7 +38,7 @@ defmodule Crawlex.Selectors.Selector do
     timestamps()
   end
 
-  @attrs [
+  @fields [
     :sku,
     :name,
     :images,
@@ -54,10 +54,10 @@ defmodule Crawlex.Selectors.Selector do
   @doc false
   def changeset(selector, attrs) do
     selector
-    |> cast(attrs, @attrs)
+    |> cast(attrs, @fields)
     |> cast_embed(:colors, with: &color_changeset/2)
     |> cast_embed(:sizes, with: &size_changeset/2)
-    |> validate_required(@attrs)
+    |> validate_required(@fields)
   end
 
   defp color_changeset(color, attrs) do
