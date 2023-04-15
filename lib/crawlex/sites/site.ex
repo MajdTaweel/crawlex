@@ -41,11 +41,13 @@ defmodule Crawlex.Sites.Site do
   defp cookie_changeset(cookie, attrs) do
     cookie
     |> cast(attrs, [:name, :value, :domain])
+    |> validate_required([:name, :value])
   end
 
   defp query_parameter_changeset(query_parameter, attrs) do
     query_parameter
     |> cast(attrs, [:name, :value])
+    |> validate_required([:name, :value])
   end
 
   defp validate_and_trim_base_url(site) do

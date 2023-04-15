@@ -1,1 +1,30 @@
+<.simple_form for={@form} phx-change="validate" phx-submit="save">
+  <.input field={@form[:name]} label="Name" />
+  <.input field={@form[:base_url]} label="Base URL" />
+  <.input
+    type="select"
+    field={@form[:country_code]}
+    label="Country Code"
+    options={country_codes()}
+  />
 
+  <.live_component
+    module={CrawlexWeb.Components.DynamicListForm}
+    id="cookie-form-group"
+    form={@form}
+    key={:cookies}
+    fields={[:name, :value, :domain]}
+  />
+
+  <.live_component
+    module={CrawlexWeb.Components.DynamicListForm}
+    id="query-parameters-form-group"
+    form={@form}
+    key={:query_parameters}
+    fields={[:name, :value]}
+  />
+
+  <:actions>
+    <.button>Save</.button>
+  </:actions>
+</.simple_form>

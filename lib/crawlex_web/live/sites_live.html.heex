@@ -1,21 +1,15 @@
-<h1>Sites</h1>
+<.header>
+  Sites
+</.header>
 
-<table>
-  <tr>
-    <th>ID</th>
-    <th>Name</th>
-    <th>Base Url</th>
-  </tr>
-
-  <%= if Enum.empty?(@sites) do %>
-    No sites yet. Start by creating one
-  <% else %>
-    <%= for site <- @sites do %>
-      <tr>
-        <td><%= site.id %></td>
-        <td><%= site.name %></td>
-        <td><%= site.base_url %></td>
-      </tr>
-    <% end %>
-  <% end %>
-</table>
+<.table id="sites-table" rows={@sites}>
+  <:col :let={site} label="ID"><%= site.id %></:col>
+  <:col :let={site} label="Name"><%= site.name %></:col>
+  <:col :let={site} label="Base URL"><%= site.base_url %></:col>
+  <:col :let={site} label="Country Code"><%= site.country_code %></:col>
+  <:col :let={site} label="">
+    <.button title="View/Edit" phx-value-site-id={site.id} phx-click="view-or-edit">
+      <.icon name="hero-adjustments-horizontal" />
+    </.button>
+  </:col>
+</.table>

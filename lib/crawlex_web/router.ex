@@ -18,6 +18,7 @@ defmodule CrawlexWeb.Router do
     pipe_through :browser
 
     get "/", PageController, :home
+    live "/sites", SitesLive
     live "/sites/new", NewSiteLive
     live "/sites/:id", SiteLive
   end
