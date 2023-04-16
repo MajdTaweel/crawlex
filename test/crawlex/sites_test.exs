@@ -10,10 +10,14 @@ defmodule Crawlex.SitesTest do
 
     @invalid_attrs %{
       base_url: nil,
+      browser_rendering: nil,
       cookies: nil,
       country_code: nil,
       name: nil,
-      query_parameters: nil
+      query_parameters: nil,
+      selectors: nil,
+      wait_for_js: nil,
+      wait_for_selectors: nil
     }
 
     test "list_sites/0 returns all sites" do
@@ -28,19 +32,27 @@ defmodule Crawlex.SitesTest do
 
     test "create_site/1 with valid data creates a site" do
       valid_attrs = %{
-        base_url: "https://some-base_url.com",
+        base_url: "https://some-base_url",
+        browser_rendering: true,
         cookies: %{},
         country_code: "some country_code",
         name: "some name",
-        query_parameters: %{}
+        query_parameters: %{},
+        selectors: %{},
+        wait_for_js: ["option1", "option2"],
+        wait_for_selectors: ["option1", "option2"]
       }
 
       assert {:ok, %Site{} = site} = Sites.create_site(valid_attrs)
-      assert site.base_url == "https://some-base_url.com"
+      assert site.base_url == "https://some-base_url"
+      assert site.browser_rendering == true
       assert site.cookies == []
       assert site.country_code == "some country_code"
       assert site.name == "some name"
       assert site.query_parameters == []
+      assert site.selectors == []
+      assert site.wait_for_js == ["option1", "option2"]
+      assert site.wait_for_selectors == ["option1", "option2"]
     end
 
     test "create_site/1 with invalid data returns error changeset" do
@@ -52,18 +64,26 @@ defmodule Crawlex.SitesTest do
 
       update_attrs = %{
         base_url: "https://some-updated-base_url",
+        browser_rendering: false,
         cookies: %{},
         country_code: "some updated country_code",
         name: "some updated name",
-        query_parameters: %{}
+        query_parameters: %{},
+        selectors: %{},
+        wait_for_js: ["option1"],
+        wait_for_selectors: ["option1"]
       }
 
       assert {:ok, %Site{} = site} = Sites.update_site(site, update_attrs)
       assert site.base_url == "https://some-updated-base_url"
+      assert site.browser_rendering == false
       assert site.cookies == []
       assert site.country_code == "some updated country_code"
       assert site.name == "some updated name"
       assert site.query_parameters == []
+      assert site.selectors == []
+      assert site.wait_for_js == ["option1"]
+      assert site.wait_for_selectors == ["option1"]
     end
 
     test "update_site/2 with invalid data returns error changeset" do

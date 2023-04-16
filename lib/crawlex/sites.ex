@@ -35,11 +35,23 @@ defmodule Crawlex.Sites do
       ** (Ecto.NoResultsError)
 
   """
-  def get_site!(id, preload_assocs \\ false) do
-    Site
-    |> Repo.get!(id)
-    |> maybe_preload_assocs(preload_assocs)
-  end
+  def get_site!(id), do: Repo.get!(Site, id)
+
+  @doc """
+  Gets a single site using a url.
+
+  Raises `Ecto.NoResultsError` if the Site does not exist.
+
+  ## Examples
+
+      iex> get_site_by_url!(https://found.example.com/example-slug)
+      %Site{}
+
+      iex> get_site_by_url!(https://not-found.example.com/example-slug)
+      ** (Ecto.NoResultsError)
+
+  """
+  def get_site_by_url!(url), do: Repo.get_by!(Site, base_url: base_url_from_url!(url))
 
   @doc """
   Creates a site.
@@ -106,6 +118,13 @@ defmodule Crawlex.Sites do
     Site.changeset(site, attrs)
   end
 
-  defp maybe_preload_assocs(site, true), do: Repo.preload(site, :selector)
-  defp maybe_preload_assocs(site, false), do: site
+  defp base_url_from_url!(url) do
+    case URI.new!(url) do
+      %{host: host, scheme: scheme} when not is_nil(host) and not is_nil(scheme) ->
+        "#{scheme}://#{String.trim(host, "/")}"
+
+      _ ->
+        raise "Invalid URL"
+    end
+  end
 end

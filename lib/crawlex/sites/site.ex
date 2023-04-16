@@ -7,6 +7,7 @@ defmodule Crawlex.Sites.Site do
 
   schema "sites" do
     field :base_url, :string
+    field :browser_rendering, :boolean, default: false
 
     embeds_many :cookies, Cookie, primary_key: false, on_replace: :delete do
       field :domain, :string
@@ -22,15 +23,25 @@ defmodule Crawlex.Sites.Site do
       field :value, :string
     end
 
-    has_one :selector, Crawlex.Selectors.Selector
+    embeds_many :selectors, Selectors, primary_key: false, on_replace: :delete do
+      field :name, :string
+      field :selector, :string
+      field :attribute, :string, default: "text"
+    end
+
+    field :wait_for_js, {:array, :string}
+    field :wait_for_selectors, {:array, :string}
 
     timestamps()
   end
 
   @fields [
-    :name,
     :base_url,
-    :country_code
+    :browser_rendering,
+    :country_code,
+    :name,
+    :wait_for_js,
+    :wait_for_selectors
   ]
   @doc false
   def changeset(site, attrs) do
@@ -38,10 +49,10 @@ defmodule Crawlex.Sites.Site do
     |> cast(attrs, @fields)
     |> cast_embed(:cookies, with: &cookie_changeset/2)
     |> cast_embed(:query_parameters, with: &query_parameter_changeset/2)
+    |> cast_embed(:selectors, with: &selector_changeset/2)
     |> validate_required(@fields)
     |> validate_and_trim_base_url()
     |> unique_constraint(:base_url)
-    |> cast_assoc(:selector)
   end
 
   defp cookie_changeset(cookie, attrs) do
@@ -54,6 +65,12 @@ defmodule Crawlex.Sites.Site do
     query_parameter
     |> cast(attrs, [:name, :value])
     |> validate_required([:name, :value])
+  end
+
+  defp selector_changeset(cookie, attrs) do
+    cookie
+    |> cast(attrs, [:name, :selector, :attribute])
+    |> validate_required([:selector])
   end
 
   defp validate_and_trim_base_url(site) do
