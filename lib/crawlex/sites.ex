@@ -35,11 +35,10 @@ defmodule Crawlex.Sites do
       ** (Ecto.NoResultsError)
 
   """
-  def get_site!(id) do
+  def get_site!(id, preload_assocs \\ false) do
     Site
     |> Repo.get!(id)
-
-    # |> Repo.preload(:selector)
+    |> maybe_preload_assocs(preload_assocs)
   end
 
   @doc """
@@ -106,4 +105,7 @@ defmodule Crawlex.Sites do
   def change_site(%Site{} = site, attrs \\ %{}) do
     Site.changeset(site, attrs)
   end
+
+  defp maybe_preload_assocs(site, true), do: Repo.preload(site, :selector)
+  defp maybe_preload_assocs(site, false), do: site
 end

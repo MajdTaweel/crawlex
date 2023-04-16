@@ -9,7 +9,7 @@ defmodule CrawlexWeb.SiteLive do
      |> assign(:id, id)
      |> assign(
        :form,
-       Sites.get_site!(id)
+       Sites.get_site!(id, true)
        |> Sites.change_site()
        |> to_form
      )}

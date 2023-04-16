@@ -59,11 +59,30 @@ defmodule CrawlexWeb.Components.SiteForm do
       |> Map.put(:action, action(site.id))
       |> to_form()
 
-    {:noreply, assign(socket, form: form)}
+    {:noreply, assign(socket, :form, form)}
   end
 
-  def handle_event("save", _params, socket) do
-    {:noreply, socket}
+  def handle_event("save", %{"site" => params}, socket) do
+    site = socket.assigns.form.data
+
+    case Sites.update_site(site, params) do
+      {:ok, site} ->
+        form =
+          site
+          |> Sites.change_site()
+          |> to_form()
+
+        {
+          :noreply,
+          socket
+          |> assign(:form, form)
+          |> put_flash(:info, "Site saved successfully.")
+          |> push_navigate(to: ~p"/sites/#{site.id}")
+        }
+
+      {:error, changeset} ->
+        {:noreply, assign(socket, :form, to_form(changeset))}
+    end
   end
 
   defp country_codes do
