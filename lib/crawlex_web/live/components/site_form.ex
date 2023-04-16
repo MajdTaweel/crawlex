@@ -37,9 +37,11 @@ defmodule CrawlexWeb.Components.SiteForm do
         />
 
         <.live_component
-          module={CrawlexWeb.Components.SelectorsForm}
+          module={CrawlexWeb.Components.DynamicListForm}
           id="selectors-form-group"
           form={@form}
+          key={:selectors}
+          fields={[:name, :selector, :attribute]}
         />
 
         <:actions>
@@ -56,7 +58,6 @@ defmodule CrawlexWeb.Components.SiteForm do
     form =
       site
       |> Sites.change_site(params)
-      |> Map.put(:action, action(site.id))
       |> to_form()
 
     {:noreply, assign(socket, :form, form)}
@@ -65,7 +66,7 @@ defmodule CrawlexWeb.Components.SiteForm do
   def handle_event("save", %{"site" => params}, socket) do
     site = socket.assigns.form.data
 
-    case Sites.update_site(site, params) do
+    case save_site(site, params) do
       {:ok, site} ->
         form =
           site
@@ -89,6 +90,6 @@ defmodule CrawlexWeb.Components.SiteForm do
     Countries.all() |> Enum.map(&{:"#{&1.name}", &1.alpha2})
   end
 
-  defp action(nil), do: :insert
-  defp action(_), do: :update
+  defp save_site(%{id: nil}, params), do: Sites.create_site(params)
+  defp save_site(site, params), do: Sites.update_site(site, params)
 end

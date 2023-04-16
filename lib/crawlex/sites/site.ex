@@ -23,7 +23,7 @@ defmodule Crawlex.Sites.Site do
       field :value, :string
     end
 
-    embeds_many :selectors, Selectors, primary_key: false, on_replace: :delete do
+    embeds_many :selectors, Selector, primary_key: false, on_replace: :delete do
       field :name, :string
       field :selector, :string
       field :attribute, :string, default: "text"
@@ -43,6 +43,12 @@ defmodule Crawlex.Sites.Site do
     :wait_for_js,
     :wait_for_selectors
   ]
+  @required_fields [
+    :base_url,
+    :browser_rendering,
+    :country_code,
+    :name
+  ]
   @doc false
   def changeset(site, attrs) do
     site
@@ -50,7 +56,7 @@ defmodule Crawlex.Sites.Site do
     |> cast_embed(:cookies, with: &cookie_changeset/2)
     |> cast_embed(:query_parameters, with: &query_parameter_changeset/2)
     |> cast_embed(:selectors, with: &selector_changeset/2)
-    |> validate_required(@fields)
+    |> validate_required(@required_fields)
     |> validate_and_trim_base_url()
     |> unique_constraint(:base_url)
   end
@@ -67,10 +73,10 @@ defmodule Crawlex.Sites.Site do
     |> validate_required([:name, :value])
   end
 
-  defp selector_changeset(cookie, attrs) do
-    cookie
+  defp selector_changeset(selector, attrs) do
+    selector
     |> cast(attrs, [:name, :selector, :attribute])
-    |> validate_required([:selector])
+    |> validate_required([:name, :selector])
   end
 
   defp validate_and_trim_base_url(site) do
@@ -88,7 +94,7 @@ defmodule Crawlex.Sites.Site do
         put_change(site, :base_url, base_url)
 
       {:error, part} ->
-        add_error(site, :base_url, part)
+        add_error(site, :base_url, "Invalid URL: #{part}")
 
       _ ->
         add_error(site, :base_url, "Invalid URL")

@@ -19,7 +19,7 @@ defmodule CrawlexWeb.Router do
 
     get "/", PageController, :home
     live "/sites", SitesLive
-    live "/sites/new", NewSiteLive
+    live "/sites/new", SiteLive
     live "/sites/:id", SiteLive
   end
 
