@@ -66,6 +66,12 @@ defmodule CrawlexWeb.Components.SiteForm do
   def handle_event("save", %{"site" => params}, socket) do
     site = socket.assigns.form.data
 
+    params =
+      params
+      |> Map.put_new("cookies", [])
+      |> Map.put_new("query_parameters", [])
+      |> Map.put_new("selectors", [])
+
     case save_site(site, params) do
       {:ok, site} ->
         form =

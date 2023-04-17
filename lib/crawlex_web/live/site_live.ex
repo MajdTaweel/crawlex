@@ -11,7 +11,7 @@ defmodule CrawlexWeb.SiteLive do
        :form,
        get_site(params["id"])
        |> Sites.change_site()
-       |> to_form
+       |> to_form(as: "site")
      )}
   end
 
