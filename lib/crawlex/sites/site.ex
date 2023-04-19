@@ -35,20 +35,8 @@ defmodule Crawlex.Sites.Site do
     timestamps()
   end
 
-  @fields [
-    :base_url,
-    :browser_rendering,
-    :country_code,
-    :name,
-    :wait_for_js,
-    :wait_for_selectors
-  ]
-  @required_fields [
-    :base_url,
-    :browser_rendering,
-    :country_code,
-    :name
-  ]
+  @fields ~w(base_url browser_rendering country_code name wait_for_js wait_for_selectors)a
+  @required_fields ~w(base_url browser_rendering country_code name)a
   @doc false
   def changeset(site, attrs) do
     site
