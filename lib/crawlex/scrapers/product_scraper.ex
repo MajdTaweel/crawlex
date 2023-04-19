@@ -1,4 +1,4 @@
-defmodule Crawlex.Spiders.ProductSpider do
+defmodule Crawlex.Scrapers.ProductScraper do
   @moduledoc """
   This module is responsible for scraping e-commerce products by parsing the response from provided urls requests.
   """
