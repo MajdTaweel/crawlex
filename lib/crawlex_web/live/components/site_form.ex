@@ -42,6 +42,7 @@ defmodule CrawlexWeb.Components.SiteForm do
           form={@form}
           key={:selectors}
           fields={[:name, :selector, :attribute]}
+          polymorphic
         />
 
         <:actions>
@@ -54,6 +55,13 @@ defmodule CrawlexWeb.Components.SiteForm do
 
   def handle_event("validate", %{"site" => params}, socket) do
     site = socket.assigns.form.data
+
+    params =
+      Map.put(
+        params,
+        "selectors",
+        Enum.map(params["selectors"] || %{}, fn {_, v} -> v end)
+      )
 
     form =
       site

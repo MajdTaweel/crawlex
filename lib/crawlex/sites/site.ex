@@ -4,6 +4,7 @@ defmodule Crawlex.Sites.Site do
   use Ecto.Schema
 
   import Ecto.Changeset
+  import PolymorphicEmbed
 
   schema "sites" do
     field :base_url, :string
@@ -23,11 +24,13 @@ defmodule Crawlex.Sites.Site do
       field :value, :string
     end
 
-    embeds_many :selectors, Selector, primary_key: false, on_replace: :delete do
-      field :name, :string
-      field :selector, :string
-      field :attribute, :string, default: "text"
-    end
+    polymorphic_embeds_many(:selectors,
+      types: [
+        simple_selector: Crawlex.Sites.SimpleSelector
+      ],
+      on_type_not_found: :raise,
+      on_replace: :delete
+    )
 
     field :wait_for_js, {:array, :string}
     field :wait_for_selectors, {:array, :string}
@@ -35,27 +38,15 @@ defmodule Crawlex.Sites.Site do
     timestamps()
   end
 
-  @fields [
-    :base_url,
-    :browser_rendering,
-    :country_code,
-    :name,
-    :wait_for_js,
-    :wait_for_selectors
-  ]
-  @required_fields [
-    :base_url,
-    :browser_rendering,
-    :country_code,
-    :name
-  ]
+  @fields ~w(base_url browser_rendering country_code name wait_for_js wait_for_selectors)a
+  @required_fields ~w(base_url browser_rendering country_code name)a
   @doc false
   def changeset(site, attrs) do
     site
     |> cast(attrs, @fields)
     |> cast_embed(:cookies, with: &cookie_changeset/2)
     |> cast_embed(:query_parameters, with: &query_parameter_changeset/2)
-    |> cast_embed(:selectors, with: &selector_changeset/2)
+    |> cast_polymorphic_embed(:selectors)
     |> validate_required(@required_fields)
     |> validate_and_trim_base_url()
     |> unique_constraint(:base_url)
@@ -71,12 +62,6 @@ defmodule Crawlex.Sites.Site do
     query_parameter
     |> cast(attrs, [:name, :value])
     |> validate_required([:name, :value])
-  end
-
-  defp selector_changeset(selector, attrs) do
-    selector
-    |> cast(attrs, [:name, :selector, :attribute])
-    |> validate_required([:name, :selector])
   end
 
   defp validate_and_trim_base_url(site) do

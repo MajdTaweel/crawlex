@@ -24,12 +24,12 @@ defmodule CrawlexWeb.SiteLive do
   defp get_site(nil),
     do: %Sites.Site{
       selectors: [
-        %Sites.Site.Selector{name: "name"},
-        %Sites.Site.Selector{name: "sku"},
-        %Sites.Site.Selector{name: "price"},
-        %Sites.Site.Selector{name: "brand"},
-        %Sites.Site.Selector{name: "category"},
-        %Sites.Site.Selector{name: "description"}
+        %Sites.SimpleSelector{name: "name"},
+        %Sites.SimpleSelector{name: "sku"},
+        %Sites.SimpleSelector{name: "price"},
+        %Sites.SimpleSelector{name: "brand"},
+        %Sites.SimpleSelector{name: "category"},
+        %Sites.SimpleSelector{name: "description"}
       ],
       wait_for_js: [],
       wait_for_selectors: []
