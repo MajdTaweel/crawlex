@@ -69,7 +69,15 @@ defmodule Crawlex.Scrapers.ProductScraper do
     |> String.trim()
   end
 
+  defp parse("@" <> attribute, document, selector) do
+    document
+    |> Floki.find(selector)
+    |> Floki.attribute(attribute)
+    |> hd()
+    |> String.trim()
+  end
+
   defp maybe_clean_value(value, :sku) do
-    String.replace(value, ~r"[\(\)]", "")
+    String.replace(value, ~r{["\(\)]}, "")
   end
 end

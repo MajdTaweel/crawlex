@@ -27,6 +27,12 @@ defmodule Crawlex.Sites.Site do
       field :name, :string
       field :selector, :string
       field :attribute, :string, default: "text"
+
+      embeds_many :children_selectors, ChildSelector, primary_key: false, on_replace: :delete do
+        field :name, :string
+        field :selector, :string
+        field :attribute, :string, default: "text"
+      end
     end
 
     field :wait_for_js, {:array, :string}
@@ -62,6 +68,12 @@ defmodule Crawlex.Sites.Site do
   end
 
   defp selector_changeset(selector, attrs) do
+    selector
+    |> selector_without_embed_changeset(attrs)
+    |> cast_embed(:children_selectors, with: &selector_without_embed_changeset/2)
+  end
+
+  defp selector_without_embed_changeset(selector, attrs) do
     selector
     |> cast(attrs, [:name, :selector, :attribute])
     |> validate_required([:name, :selector])

@@ -37,11 +37,9 @@ defmodule CrawlexWeb.Components.SiteForm do
         />
 
         <.live_component
-          module={CrawlexWeb.Components.DynamicListForm}
+          module={CrawlexWeb.Components.SelectorsListFrom}
           id="selectors-form-group"
           form={@form}
-          key={:selectors}
-          fields={[:name, :selector, :attribute]}
         />
 
         <:actions>

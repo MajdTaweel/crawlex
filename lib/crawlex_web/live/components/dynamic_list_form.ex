@@ -3,9 +3,7 @@ defmodule CrawlexWeb.Components.DynamicListForm do
   Generates a dynamic list/array form group.
   """
 
-  use CrawlexWeb, :live_component
-
-  alias Ecto.Changeset
+  use CrawlexWeb.Components.DynamicListEvents
 
   def render(assigns) do
     ~H"""
@@ -39,36 +37,5 @@ defmodule CrawlexWeb.Components.DynamicListForm do
       </div>
     </div>
     """
-  end
-
-  def handle_event("add-new", _params, socket) do
-    key = socket.assigns.key
-    changeset = socket.assigns.form.source
-    list = Changeset.get_field(changeset, key)
-
-    form =
-      changeset
-      |> Changeset.put_change(key, list ++ [%{}])
-      |> to_form()
-
-    {:noreply, assign(socket, :form, form)}
-  end
-
-  def handle_event("remove", %{"index" => index}, socket) do
-    key = socket.assigns.key
-    index = String.to_integer(index)
-    changeset = socket.assigns.form.source
-
-    list =
-      changeset
-      |> Changeset.get_field(key)
-      |> List.delete_at(index)
-
-    form =
-      changeset
-      |> Changeset.put_change(key, list)
-      |> to_form()
-
-    {:noreply, assign(socket, :form, form)}
   end
 end
