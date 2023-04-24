@@ -2,6 +2,9 @@ defmodule CrawlexWeb.SiteLive do
   use CrawlexWeb, :live_view
 
   alias Crawlex.Sites
+  alias Crawlex.Sites.Site
+  alias Crawlex.Sites.Site.Selector
+  alias Crawlex.Sites.Site.Selector.ChildSelector
 
   def mount(params, _session, socket) do
     {:ok,
@@ -22,14 +25,32 @@ defmodule CrawlexWeb.SiteLive do
   end
 
   defp get_site(nil),
-    do: %Sites.Site{
+    do: %Site{
       selectors: [
-        %Sites.Site.Selector{name: "name"},
-        %Sites.Site.Selector{name: "sku"},
-        %Sites.Site.Selector{name: "price"},
-        %Sites.Site.Selector{name: "brand"},
-        %Sites.Site.Selector{name: "category"},
-        %Sites.Site.Selector{name: "description"}
+        %Selector{name: "name"},
+        %Selector{name: "sku"},
+        %Selector{name: "price"},
+        %Selector{name: "brand"},
+        %Selector{name: "category"},
+        %Selector{name: "description", attribute: "html"},
+        %Selector{name: "color"},
+        %Selector{
+          name: "sizes",
+          attribute: "children",
+          children_selectors: [
+            %ChildSelector{name: "name"},
+            %ChildSelector{name: "quantity"}
+          ]
+        },
+        %Selector{
+          name: "images",
+          attribute: "children",
+          children_selectors: [
+            %ChildSelector{
+              name: "uri"
+            }
+          ]
+        }
       ],
       wait_for_js: [],
       wait_for_selectors: []

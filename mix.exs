@@ -55,7 +55,8 @@ defmodule Crawlex.MixProject do
       {:crawly, "~> 0.15.0"},
       {:floki, "~> 0.34.0"},
       {:pumba, git: "https://github.com/sultaniman/pumba.git"},
-      {:countries, "~> 1.6"}
+      {:countries, "~> 1.6"},
+      {:money, "~> 1.12"}
     ]
   end
 
