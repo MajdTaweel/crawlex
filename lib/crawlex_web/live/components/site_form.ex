@@ -13,12 +13,7 @@ defmodule CrawlexWeb.Components.SiteForm do
       <.simple_form for={@form} phx-change="validate" phx-submit="save" phx-target={@myself}>
         <.input field={@form[:name]} label="Name" />
         <.input field={@form[:base_url]} label="Base URL" />
-        <.input
-          type="select"
-          field={@form[:country_code]}
-          label="Country Code"
-          options={country_codes()}
-        />
+        <.input type="select" field={@form[:country_code]} label="Country" options={country_codes()} />
 
         <.live_component
           module={CrawlexWeb.Components.DynamicListForm}
@@ -91,7 +86,21 @@ defmodule CrawlexWeb.Components.SiteForm do
   end
 
   defp country_codes do
-    Countries.all() |> Enum.map(&{:"#{&1.name}", &1.alpha2})
+    countries = Countries.all()
+
+    favorite_countries = fn %{alpha2: country_code} -> country_code in ["TR", "GB"] end
+    to_countries_map = &{:"#{&1.name}", &1.alpha2}
+
+    [
+      "":
+        countries
+        |> Enum.filter(favorite_countries)
+        |> Enum.map(to_countries_map),
+      _________:
+        countries
+        |> Enum.reject(favorite_countries)
+        |> Enum.map(to_countries_map)
+    ]
   end
 
   defp save_site(%{id: nil}, params), do: Sites.create_site(params)
