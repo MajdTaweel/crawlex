@@ -21,7 +21,7 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
         </.button>
       </div>
 
-      <div class="flex flex-col gap-y-4 py-4">
+      <div class="flex flex-col py-4">
         <.inputs_for :let={group} field={@form[:selectors]}>
           <div class="flex gap-x-2">
             <%= for field <- @fields do %>
