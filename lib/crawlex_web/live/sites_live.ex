@@ -4,8 +4,7 @@ defmodule CrawlexWeb.SitesLive do
   alias Crawlex.Sites
 
   def mount(_params, _session, socket) do
-    socket = assign(socket, :sites, Sites.list_sites())
-    {:ok, socket, temporary_assigns: [sites: []]}
+    {:ok, assign(socket, :sites, Sites.list_sites())}
   end
 
   def render(assigns) do
@@ -19,16 +18,18 @@ defmodule CrawlexWeb.SitesLive do
       </:actions>
     </.header>
 
-    <.table id="sites-table" rows={@sites}>
+    <.table id="sites-table" rows={@sites} row_id={fn %{id: id} -> "site-#{id}" end}>
       <:col :let={site} label="ID"><%= site.id %></:col>
       <:col :let={site} label="Name"><%= site.name %></:col>
       <:col :let={site} label="Base URL"><%= site.base_url %></:col>
       <:col :let={site} label="Country Code"><%= site.country_code %></:col>
-      <:col :let={site} label="">
+
+      <:action :let={site}>
         <.button title="View/Edit" phx-value-site-id={site.id} phx-click="view-or-edit">
           <.icon name="hero-adjustments-horizontal" />
         </.button>
-
+      </:action>
+      <:action :let={site}>
         <.button
           title="Delete"
           phx-value-site-id={site.id}
@@ -37,7 +38,16 @@ defmodule CrawlexWeb.SitesLive do
         >
           <.icon name="hero-trash" />
         </.button>
-      </:col>
+      </:action>
+
+      <:empty>
+        <div class="flex justify-center">
+          No sites yet...
+          <.link title="Create New Site" href={~p"/sites/new"}>
+            Create One <.icon name="hero-plus" />
+          </.link>
+        </div>
+      </:empty>
     </.table>
     """
   end
