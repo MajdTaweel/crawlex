@@ -3,32 +3,14 @@ defmodule CrawlexWeb.Components.DynamicListEvents do
   Macro for defining default functions for (flat/nested) dynamic list forms.
   """
 
-  def update([]) do
-    nil
-  end
-
-  def update(key) when is_atom(key) do
-    quote do
-      def update(%{form: form} = _assigns, socket) do
-        {:ok,
-         assign(socket, %{
-           key: :selectors,
-           form: form
-         })}
-      end
-    end
-  end
-
-  defmacro __using__(key) do
+  defmacro __using__(_opts) do
     quote do
       use CrawlexWeb, :live_component
       @before_compile CrawlexWeb.Components.DynamicListEvents
-
-      unquote(update(key))
     end
   end
 
-  defmacro __before_compile__(_) do
+  defmacro __before_compile__(_opts) do
     quote do
       alias Ecto.Changeset
 
