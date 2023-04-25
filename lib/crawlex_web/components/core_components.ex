@@ -435,6 +435,8 @@ defmodule CrawlexWeb.CoreComponents do
 
   slot :action, doc: "the slot for showing user actions in the last table column"
 
+  slot :empty, doc: "the slot for rendering when rows are empty"
+
   def table(assigns) do
     assigns =
       with %{rows: %Phoenix.LiveView.LiveStream{}} <- assigns do
@@ -478,6 +480,12 @@ defmodule CrawlexWeb.CoreComponents do
                   <%= render_slot(action, @row_item.(row)) %>
                 </span>
               </div>
+            </td>
+          </tr>
+
+          <tr :if={Enum.empty?(@rows)}>
+            <td colspan={Enum.count(@col)}>
+              <%= render_slot(@empty) %>
             </td>
           </tr>
         </tbody>
