@@ -3,7 +3,7 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
   Dynamic nested list form for site selectors.
   """
 
-  use CrawlexWeb.Components.DynamicListEvents
+  use CrawlexWeb, :live_component
 
   alias Crawlex.Sites
   alias Ecto.Changeset
@@ -160,6 +160,10 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
     {:noreply,
      assign(socket, :selectors_with_children, selectors_with_children(socket.assigns, selectors))}
   end
+
+  defdelegate handle_event(event, params, socket),
+    to: CrawlexWeb.Live.Helpers,
+    as: :handle_dynamic_list_form_event
 
   defp selectors_with_children(assigns, [%Sites.Site.Selector{} | _rest] = selectors) do
     selectors =

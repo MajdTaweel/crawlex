@@ -3,7 +3,7 @@ defmodule CrawlexWeb.Components.DynamicListForm do
   Generates a dynamic list/array form group.
   """
 
-  use CrawlexWeb.Components.DynamicListEvents
+  use CrawlexWeb, :live_component
 
   def render(assigns) do
     ~H"""
@@ -38,4 +38,8 @@ defmodule CrawlexWeb.Components.DynamicListForm do
     </div>
     """
   end
+
+  defdelegate handle_event(event, params, socket),
+    to: CrawlexWeb.Live.Helpers,
+    as: :handle_dynamic_list_form_event
 end
