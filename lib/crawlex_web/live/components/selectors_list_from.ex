@@ -14,16 +14,16 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
 
   @fields ~w(name selector attribute)a
   def update(assigns, socket) do
-    {:ok,
-     assign(
-       socket,
-       key: :selectors,
-       form: assigns.form,
-       selectors_with_children:
-         assigns[:selectors_with_children] ||
-           selectors_with_children(assigns, assigns.form.data.selectors),
-       fields: @fields
-     )}
+    socket =
+      socket
+      |> assign(
+        key: :selectors,
+        form: assigns.form,
+        fields: @fields
+      )
+      |> assign_selectors_with_children(assigns)
+
+    {:ok, socket}
   end
 
   def render(assigns) do
@@ -43,8 +43,9 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
               <.input
                 field={group[field]}
                 label={title_from_atom(field)}
-                phx-change={field == :attribute && "attribute-changed"}
+                phx-keyup={field == :attribute && "attribute-changed"}
                 phx-target={@myself}
+                phx-value-index={group.index}
               />
             <% end %>
 
@@ -156,44 +157,41 @@ defmodule CrawlexWeb.Components.SelectorsListFrom do
     {:noreply, assign(socket, :form, form)}
   end
 
-  def handle_event("attribute-changed", %{"site" => %{"selectors" => selectors}}, socket) do
-    {:noreply,
-     assign(socket, :selectors_with_children, selectors_with_children(socket.assigns, selectors))}
+  def handle_event("attribute-changed", %{"index" => index, "value" => value}, socket) do
+    {:noreply, assign_selectors_with_children(socket, String.to_integer(index), value)}
   end
 
   defdelegate handle_event(event, params, socket),
     to: CrawlexWeb.Live.Helpers,
     as: :handle_dynamic_list_form_event
 
-  defp selectors_with_children(assigns, [%Sites.Site.Selector{} | _rest] = selectors) do
+  defp assign_selectors_with_children(socket, assigns) do
     selectors =
-      Enum.with_index(selectors, fn selector, index -> {"#{index}", Map.from_struct(selector)} end)
+      socket.assigns[:selectors_with_children] ||
+        assigns.form.data.selectors
+        |> Enum.with_index(fn selector, index ->
+          {"#{index}", Map.from_struct(selector)}
+        end)
+        |> Enum.filter(fn
+          {_key, %{"attribute" => attribute}} -> attribute == "children"
+          {_key, %{attribute: attribute}} -> attribute == "children"
+        end)
+        |> Enum.map(fn {key, _value} -> String.to_integer(key) end)
+        |> MapSet.new()
 
-    get_selectors_with_children(assigns, selectors)
+    assign(socket, :selectors_with_children, selectors)
   end
 
-  defp selectors_with_children(assigns, selectors),
-    do: get_selectors_with_children(assigns, selectors)
+  defp assign_selectors_with_children(socket, index, value) do
+    selectors = socket.assigns.selectors_with_children
 
-  defp get_selectors_with_children(assigns, selectors) do
-    filter_with_children = fn
-      {_key, %{"attribute" => attribute}} -> attribute == "children"
-      {_key, %{attribute: attribute}} -> attribute == "children"
-    end
+    selectors =
+      if value == "children" do
+        MapSet.put(selectors, index)
+      else
+        MapSet.delete(selectors, index)
+      end
 
-    selectors_without_children =
-      selectors
-      |> Enum.reject(filter_with_children)
-      |> Enum.map(fn {key, _value} -> String.to_integer(key) end)
-
-    selectors_with_children =
-      selectors
-      |> Enum.filter(filter_with_children)
-      |> Enum.map(fn {key, _value} -> String.to_integer(key) end)
-
-    selectors_with_children ++
-      Enum.reject(assigns[:selectors_with_children] || [], fn selector_index ->
-        selector_index in selectors_without_children
-      end)
+    assign(socket, :selectors_with_children, selectors)
   end
 end

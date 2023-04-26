@@ -64,6 +64,13 @@ defmodule CrawlexWeb.Components.SiteForm do
       |> Map.put_new("cookies", [])
       |> Map.put_new("query_parameters", [])
       |> Map.put_new("selectors", [])
+      |> Map.update!("selectors", fn selectors ->
+        selectors
+        |> Enum.map(fn
+          {_index, %{"attribute" => "children"} = selector} -> selector
+          {_index, selector} -> Map.put(selector, "children", [])
+        end)
+      end)
 
     case save_site(site, params) do
       {:ok, site} ->
