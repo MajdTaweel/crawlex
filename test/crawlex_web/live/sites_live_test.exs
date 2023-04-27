@@ -3,6 +3,7 @@ defmodule CrawlexWeb.SitesLiveTest do
 
   import Phoenix.LiveViewTest
 
+  alias Crawlex.Sites
   alias Crawlex.Sites.Site
   alias Crawlex.SitesFixtures
 
@@ -25,6 +26,22 @@ defmodule CrawlexWeb.SitesLiveTest do
       assert view
              |> element("#site-#{id2}")
              |> has_element?()
+    end
+
+    test "delete site", %{conn: conn} do
+      %Site{id: id} = SitesFixtures.site_fixture()
+
+      {:ok, view, _html} = live(conn, "/sites")
+
+      refute view
+             |> element("#site-#{id} button[title='Delete']")
+             |> render_click() =~ "site-#{id}"
+
+      refute view
+             |> element("#site-#{id}")
+             |> has_element?()
+
+      assert_raise Ecto.NoResultsError, fn -> Sites.get_site!(id) end
     end
   end
 end
