@@ -7,44 +7,6 @@
 # General application configuration
 import Config
 
-config :crawly,
-  pipelines: [
-    {Crawly.Pipelines.Validate, fields: [:sku, :name]}
-  ],
-  middlewares: [
-    Crawly.Middlewares.UniqueRequest,
-    Crawly.Middlewares.RobotsTxt,
-    Crawlex.Middlewares.UserAgent,
-    {Crawly.Middlewares.RequestOptions, [timeout: 30_000, recv_timeout: 15000]}
-  ]
-
-if Mix.env() == :dev do
-  config :git_hooks,
-    auto_install: true,
-    verbose: true,
-    branches: [
-      whitelist: ["feature-.*"],
-      blacklist: ["master"]
-    ],
-    hooks: [
-      pre_commit: [
-        tasks: [
-          {:cmd, "mix format --check-formatted"},
-          {:cmd, "mix credo --strict"},
-          {:cmd, "mix test --color"}
-        ]
-      ],
-      pre_push: [
-        verbose: false,
-        tasks: [
-          {:cmd, "mix dialyzer"},
-          {:cmd, "mix test --color"},
-          {:cmd, "echo 'success!'"}
-        ]
-      ]
-    ]
-end
-
 config :crawlex,
   ecto_repos: [Crawlex.Repo]
 
@@ -96,6 +58,44 @@ config :logger, :console,
 
 # Use Jason for JSON parsing in Phoenix
 config :phoenix, :json_library, Jason
+
+config :crawly,
+  pipelines: [
+    {Crawly.Pipelines.Validate, fields: [:sku, :name]}
+  ],
+  middlewares: [
+    Crawly.Middlewares.UniqueRequest,
+    Crawly.Middlewares.RobotsTxt,
+    Crawlex.Middlewares.UserAgent,
+    {Crawly.Middlewares.RequestOptions, [timeout: 30_000, recv_timeout: 15000]}
+  ]
+
+if Mix.env() == :dev do
+  config :git_hooks,
+    auto_install: true,
+    verbose: true,
+    branches: [
+      whitelist: ["feature-.*"],
+      blacklist: ["master"]
+    ],
+    hooks: [
+      pre_commit: [
+        tasks: [
+          {:cmd, "mix format --check-formatted"},
+          {:cmd, "mix credo --strict"},
+          {:cmd, "mix test --color"}
+        ]
+      ],
+      pre_push: [
+        verbose: false,
+        tasks: [
+          {:cmd, "mix dialyzer"},
+          {:cmd, "mix test --color"},
+          {:cmd, "echo 'success!'"}
+        ]
+      ]
+    ]
+end
 
 # Import environment specific config. This must remain at the bottom
 # of this file so it overrides the configuration defined above.
